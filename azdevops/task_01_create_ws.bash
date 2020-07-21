@@ -11,7 +11,8 @@ cat << EOF > create_ws.json
 {
 	"data": {
 		"attributes": {
-			"name": "$TFE_WORKSPACE"
+			"name": "$TFE_WORKSPACE",
+			"auto-apply": "true"
 		},
 		"type": "workspaces"
 	}

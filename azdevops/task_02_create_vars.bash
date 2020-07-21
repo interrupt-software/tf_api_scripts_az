@@ -51,8 +51,6 @@ RESPONSE=$( curl -k -s \
 # 	SUCCESS=true
 # fi
 
-rm -f create_var.json
-
 cat << EOF >  create_var2.json
 {
   "data": {
@@ -137,7 +135,7 @@ cat << EOF > create_var4.json
 }
 EOF
 
-curl -k \
+curl -k -s \
   --header "Authorization: Bearer $TFE_TOKEN" \
   --header "Content-Type: application/vnd.api+json" \
   --request POST \
