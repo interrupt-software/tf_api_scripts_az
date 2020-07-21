@@ -6,7 +6,6 @@
 # TFE_TOKEN
 # TFE_WORKSPACE
 #
-source ${PWD}/prepare_env.bash
 
 cat << EOF > create_ws.json
 {
