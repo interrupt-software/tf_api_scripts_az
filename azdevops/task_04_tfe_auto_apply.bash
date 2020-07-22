@@ -1,7 +1,7 @@
 WORKSPACE_ID=$(curl -s \
-  --header "Authorization: Bearer $TFE_TOKEN" \
+  --header "Authorization: Bearer $(TFE_TOKEN)" \
   --header "Content-Type: application/vnd.api+json" \
-  $TFE_HOST/api/v2/organizations/$TFE_ORG/workspaces/$TFE_WORKSPACE \
+  $(TFE_HOST)/api/v2/organizations/$(TFE_ORG)/workspaces/$(TFE_WORKSPACE) \
   | jq '.data.id' \
   | tr -d '"' )
 
@@ -17,11 +17,11 @@ cat << EOF > config_ver.json
 EOF
 
 UPLOAD_URL=$(curl -s \
-  --header "Authorization: Bearer $TFE_TOKEN" \
+  --header "Authorization: Bearer $(TFE_TOKEN)" \
   --header "Content-Type: application/vnd.api+json" \
   --request POST \
   --data @config_ver.json \
-  $TFE_HOST/api/v2/workspaces/$WORKSPACE_ID/configuration-versions \
+  $(TFE_HOST)/api/v2/workspaces/$WORKSPACE_ID/configuration-versions \
   | jq -r '.data.attributes."upload-url"')
 
 UPLOAD_FILE_NAME="infra.tar.gz"
@@ -52,10 +52,10 @@ cat << EOF > tfe_run.json
 EOF
 
 RESULT=$(curl -s \
-  --header "Authorization: Bearer $TFE_TOKEN" \
+  --header "Authorization: Bearer $(TFE_TOKEN)" \
   --header "Content-Type: application/vnd.api+json" \
   --data @tfe_run.json \
-  $TFE_HOST/api/v2/runs)
+  $(TFE_HOST)/api/v2/runs)
 
 RUN_ID=$(echo  $RESULT | jq '.data.id' | tr -d '"')
 
@@ -64,9 +64,9 @@ SUCCESS=false
 
 while [ $RUNNING -ne 0 ]; do
   RUN_STATUS=$(curl -s \
-    --header "Authorization: Bearer $TFE_TOKEN" \
+    --header "Authorization: Bearer $(TFE_TOKEN)" \
     --header "Content-Type: application/vnd.api+json" \
-    $TFE_HOST/api/v2/runs/$RUN_ID \
+    $(TFE_HOST)/api/v2/runs/$RUN_ID \
     | jq '.data.attributes.status' \
     | tr -d '"' )
 

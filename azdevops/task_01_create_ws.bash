@@ -11,7 +11,7 @@ cat << EOF > create_ws.json
 {
 	"data": {
 		"attributes": {
-			"name": "$TFE_WORKSPACE",
+			"name": "$(TFE_WORKSPACE)",
 			"auto-apply": "true"
 		},
 		"type": "workspaces"
@@ -22,11 +22,11 @@ EOF
 # Call the Terraform API to initialize a new workspace
 #
 RESPONSE=$(curl -k -s \
-  --header "Authorization: Bearer $TFE_TOKEN" \
+  --header "Authorization: Bearer $(TFE_TOKEN)" \
   --header "Content-Type: application/vnd.api+json" \
   --request POST \
   --data @create_ws.json \
-  $TFE_HOST/api/v2/organizations/$TFE_ORG/workspaces)
+  $(TFE_HOST)/api/v2/organizations/$(TFE_ORG)/workspaces)
 
 rm -f create_ws.json
 
@@ -38,7 +38,7 @@ WORKSPACE_ID=$(echo $RESPONSE | jq '.data.id' | tr -d '"')
 if [ $WORKSPACE_ID == null ]; then
 	SUCCESS=false
 	ERROR=$(echo $RESPONSE | jq '.errors[0].detail')
-	echo "Error in creating workspace $TFE_WORKSPACE: "$ERROR
+	echo "Error in creating workspace $(TFE_WORKSPACE): "$ERROR
 else
 	SUCCESS=true
 fi
