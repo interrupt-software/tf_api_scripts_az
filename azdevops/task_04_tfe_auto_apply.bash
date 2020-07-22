@@ -25,7 +25,7 @@ UPLOAD_URL=$(curl -s \
   | jq -r '.data.attributes."upload-url"')
 
 UPLOAD_FILE_NAME="infra.tar.gz"
-tar -czf $UPLOAD_FILE_NAME -C ../infra --exclude .git .
+tar -czf $UPLOAD_FILE_NAME -C $(System.DefaultWorkingDirectory)/_virtual_machine/infra --exclude .git .
 
 curl \
   --header "Content-Type: application/octet-stream" \
