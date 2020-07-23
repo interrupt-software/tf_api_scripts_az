@@ -6,7 +6,7 @@
 import "tfplan-functions" as plan
 
 # List of mandatory tags
-mandatory_tags = ["environment"]
+mandatory_tags = ["owner"]
 
 # Get all Azure VMs
 allAzureVMs = plan.find_resources("azurerm_virtual_machine")
