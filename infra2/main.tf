@@ -44,11 +44,11 @@ resource "azurerm_public_ip" "azvm" {
   allocation_method   = "Static"
 }
 
-resource "azurerm_virtual_machine" "main" {
+resource "azurerm_virtual_machine" "azvm" {
   name                = "${var.prefix}-vm"
   resource_group_name = azurerm_resource_group.azvm.name
   location            = azurerm_resource_group.azvm.location
-  size                = "Standard_F2"
+  vm_size             = "Standard_F2"
   network_interface_ids = [
     azurerm_network_interface.azvm.id,
   ]
@@ -73,7 +73,7 @@ resource "azurerm_virtual_machine" "main" {
   }
   os_profile {
     computer_name  = "hostname"
-    admin_username = "testadmin"
+    admin_username = var.tfadmin
     admin_password = "Password1234!"
   }
   os_profile_linux_config {
@@ -83,6 +83,7 @@ resource "azurerm_virtual_machine" "main" {
     environment = "staging"
   }
 }
+
 
 resource "azurerm_network_security_group" "azvm" {
   name                = "${var.prefix}-nsg"

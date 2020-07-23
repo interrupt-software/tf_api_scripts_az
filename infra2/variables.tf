@@ -1,18 +1,14 @@
 variable "prefix" {
   type    = string
-  default = "interrupt"
+  default = "tfe-project-02"
 }
 
 variable "location" {
   type    = string
-  default = "Canada East"
+  default = "East US"
 }
 
 variable "tfadmin" {
   type    = string
   default = "tfadmin"
-}
-
-variable "public_key" {
-  type = string
 }
