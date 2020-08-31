@@ -36,9 +36,9 @@ rm -f create_ws.json
 WORKSPACE_ID=$(echo $RESPONSE | jq '.data.id' | tr -d '"')
 
 if [ $WORKSPACE_ID == null ]; then
-	SUCCESS=false
 	ERROR=$(echo $RESPONSE | jq '.errors[0].detail')
-	echo "Error in creating workspace $TFE_WORKSPACE: "$ERROR
+	echo "Error in creating workspace $TFE_WORKSPACE: "$ERROR 1>&2
+	exit 1
 else
-	SUCCESS=true
+  exit 0
 fi
