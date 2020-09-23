@@ -3,10 +3,10 @@
 # This script assumes the availability of the following variables in a Azure
 # DevOps variable group:
 #
-echo $TFE_HOST
-echo $TFE_ORG
-echo $TFE_TOKEN
-echo $TFE_WORKSPACE
+# echo $TFE_HOST
+# echo $TFE_ORG
+# echo $TFE_TOKEN
+# echo $TFE_WORKSPACE
 #
 # These varables are used throught the entire pipeline run
 #

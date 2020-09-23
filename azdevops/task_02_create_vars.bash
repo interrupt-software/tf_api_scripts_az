@@ -1,11 +1,28 @@
 #!/bin/bash
 
+a="$(Release.DefinitionName)"
+b="$(Release.ReleaseName)"
+TFE_WORKSPACE=${a// /_}"-"${b// /_}
+echo "##vso[task.setvariable variable=TFE_WORKSPACE;isSecret=false;isOutput=true;]$TFE_WORKSPACE"
+
+cat << EOF > create_ws.json
+{
+	"data": {
+		"attributes": {
+			"name": "$TFE_WORKSPACE",
+			"auto-apply": "true"
+		},
+		"type": "workspaces"
+	}
+}
+EOF
+
 WORKSPACE_ID=$(curl -k -s \
   --header "Authorization: Bearer $(TFE_TOKEN)" \
   --header "Content-Type: application/vnd.api+json" \
-  $(TFE_HOST)/api/v2/organizations/$(TFE_ORG)/workspaces/$(TFE_WORKSPACE) \
-  | jq '.data.id' \
-  | tr -d '"' )
+  --request POST \
+  --data @create_ws.json \
+  $(TFE_HOST)/api/v2/organizations/$(TFE_ORG)/workspaces)
 
 cat << EOF > create_var1.json
 {
@@ -35,21 +52,7 @@ RESPONSE=$( curl -k -s \
   --header "Content-Type: application/vnd.api+json" \
   --request POST \
   --data @create_var1.json \
-  $(TFE_HOST)/api/v2/vars )
-
-# VARIABLE=$(cat create_var.json | jq '.data.attributes.key' | tr -d '"')
-#
-# # Use the SUCCESS and ERROR pieces as control variables for this task
-# # in the pipeline. The task should stop the pipeline on failure.
-# #
-# WORKSPACE_ID=$(echo $RESPONSE | jq '.data.id' | tr -d '"')
-#
-# if [ $WORKSPACE_ID == null ]; then
-# 	SUCCESS=false
-# 	ERROR=$(echo $RESPONSE | jq '.errors[0].detail')
-# else
-# 	SUCCESS=true
-# fi
+  https://$(TFE_HOST)/api/v2/vars )
 
 cat << EOF >  create_var2.json
 {
@@ -79,7 +82,7 @@ curl -k -s \
   --header "Content-Type: application/vnd.api+json" \
   --request POST \
   --data @create_var2.json \
-  $(TFE_HOST)/api/v2/vars
+  https://$(TFE_HOST)/api/v2/vars
 
 
 cat << EOF > create_var3.json
@@ -110,7 +113,7 @@ curl -k -s \
   --header "Content-Type: application/vnd.api+json" \
   --request POST \
   --data @create_var3.json \
-  $(TFE_HOST)/api/v2/vars
+  https://$(TFE_HOST)/api/v2/vars
 
 cat << EOF > create_var4.json
 {
@@ -140,7 +143,7 @@ curl -k -s \
   --header "Content-Type: application/vnd.api+json" \
   --request POST \
   --data @create_var4.json \
-  $(TFE_HOST)/api/v2/vars
+  https://$(TFE_HOST)/api/v2/vars
 
 rm -f create_var1.json
 rm -f create_var2.json
